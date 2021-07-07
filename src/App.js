@@ -1,21 +1,39 @@
-import logo from './logo.svg';
+import { useLayoutEffect, useState } from 'react';
 import './App.css';
+const axios = require('axios');
+
+
 
 function App() {
+  const [personagem, setPersonagem] = useState([])
+
+
+  const getPersonagem = () =>{
+    axios.get('https://rickandmortyapi.com/api/character')
+        .then(retorno => {
+          console.log(retorno.data.results)
+          setPersonagem(retorno.data.results)
+        })
+  }
+
+  useLayoutEffect(() =>{
+    
+    getPersonagem();
+
+
+  }, [])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Rick And Morty</h1>
+
+      <div className="App-header">
+       {personagem.map((item, chave) =>
+        <div key={chave} className="Perss">
+          <img src={item.image} /> <p> {item.name} / {item.species} / {item.status}</p> 
+        </div>
+       )}
+      </div>
     </div>
   );
 }
